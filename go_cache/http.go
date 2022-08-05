@@ -1,8 +1,8 @@
 package go_cache
 
 import (
+	"Cache/go_cache/consistenthash"
 	"fmt"
-	"go_cache/consistenthash"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -28,7 +28,7 @@ type httpGetter struct {
 	baseURL string //例如 http://example.com/_geecache/
 }
 
-//实现 PeerGetter 接口
+// 实现 PeerGetter 接口
 func (h *httpGetter) Get(group string, key string) ([]byte, error) {
 	u := fmt.Sprintf(
 		"%v%v%V",

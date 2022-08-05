@@ -1,8 +1,8 @@
 package go_cache
 
 import (
+	"Cache/go_cache/singleflight"
 	"fmt"
-	"go_cache/singleflight"
 	"log"
 	"sync"
 )
@@ -12,8 +12,8 @@ type Getter interface {
 	Get(key string) ([]byte, error)
 }
 
-//定义一个函数类型 F，并且实现接口 A 的方法，然后在这个方法中调用自己。
-//将其他函数（参数返回值定义与 F 一致）转换为接口 A
+// 定义一个函数类型 F，并且实现接口 A 的方法，然后在这个方法中调用自己。
+// 将其他函数（参数返回值定义与 F 一致）转换为接口 A
 // A GetterFunc implements Getter with a function.
 type GetterFunc func(key string) ([]byte, error)
 
@@ -52,7 +52,7 @@ func NewGroup(name string, cacheBytes int64, getter Getter) *Group {
 	return g
 }
 
-//返回名称所对应的group
+// 返回名称所对应的group
 func GetGroup(name string) *Group {
 	mu.RLock()
 	g := groups[name]
@@ -60,7 +60,7 @@ func GetGroup(name string) *Group {
 	return g
 }
 
-//Group实现接口Getter的方法Get
+// Group实现接口Getter的方法Get
 func (g *Group) Get(key string) (ByteView, error) {
 	if key == "" {
 		return ByteView{}, fmt.Errorf("key required")
@@ -82,7 +82,7 @@ func (g *Group) GetLocally(key string) (ByteView, error) {
 	return value, nil
 }
 
-//  HTTPPool实现PeerPicker 接口的 ，注入到 Group 中
+// HTTPPool实现PeerPicker 接口的 ，注入到 Group 中
 func (g *Group) RegisterPeers(peers PeerPicker) {
 	if g.peers != nil {
 		panic("RegisterPeerPicker called more than once")
